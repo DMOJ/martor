@@ -8,15 +8,15 @@ from ..settings import (
 """
 >>> import markdown
 >>> md = markdown.Markdown(extensions=['martor.utils.extensions.mention'])
->>> md.convert('@[summonagus]')
+>>> md.convert('[user:summonagus]')
 '<p><a class="direct-mention-link" href="https://webname.com/profile/summonagus/">summonagus</a></p>'
 >>>
->>> md.convert('hello @[summonagus], i mentioned you!')
+>>> md.convert('hello [user:summonagus], i mentioned you!')
 '<p>hello <a class="direct-mention-link" href="https://webname.com/profile/summonagus/">summonagus</a>, i mentioned you!</p>'
 >>>
 """
 
-MENTION_RE = r'(?<!\!)\@\[([^\]]+)\]'
+MENTION_RE = r'(?<!\!)\[(\w+)\]'
 
 
 class MentionPattern(markdown.inlinepatterns.Pattern):
@@ -32,7 +32,7 @@ class MentionPattern(markdown.inlinepatterns.Pattern):
                 el = markdown.util.etree.Element('a')
                 el.set('href', url)
                 el.set('class', 'direct-mention-link')
-                el.text = markdown.util.AtomicString('@' + username)
+                el.text = markdown.util.AtomicString(username)
                 return el
 
 

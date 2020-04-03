@@ -82,8 +82,14 @@
                     var curTokens = obj.value.split(/\s+/);
                     var lastToken = curTokens[curTokens.length-1];
 
-                    if (lastToken[0] == '@' && lastToken[1] == '[') {
-                        username = lastToken.replace(/([\@\[/\]/])/g, '');
+                    var matches = true;
+                    var match_str = '[user:';
+                    for (var i = 0; i < match_str.length; i++){
+                        matches &= match_str[i] == lastToken[i];
+                    }
+
+                    if (matches) {
+                        username = lastToken.replace(/([\[user:/\]/])/g, '');
                         $.ajax({
                             url: textareaId.data('search-users-url'),
                             data: {
@@ -501,17 +507,17 @@
                 var originalRange = editor.getSelectionRange();
                 if (editor.selection.isEmpty()) {
                     var curpos = editor.getCursorPosition();
-                    editor.session.insert(curpos, ' @[]');
+                    editor.session.insert(curpos, ' [user:]');
                     editor.focus();
-                    editor.selection.moveTo(curpos.row, curpos.column+3);
+                    editor.selection.moveTo(curpos.row, curpos.column+7);
                 }else {
                   var range = editor.getSelectionRange();
                   var text = editor.session.getTextRange(range);
-                  editor.session.replace(range, '@['+text+']');
+                  editor.session.replace(range, '[user:'+text+']');
                   editor.focus();
                   editor.selection.moveTo(
                       originalRange.end.row,
-                      originalRange.end.column+3
+                      originalRange.end.column+6
                   )
                 }
             };
