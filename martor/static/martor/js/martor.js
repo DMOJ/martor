@@ -376,6 +376,60 @@
                   editor.selection.setSelectionRange(originalRange);
                 }
             };
+            // win/linux: Ctrl+Alt+I, mac: Command+Option+I
+            var markdownToInlineMath = function(editor) {
+                var originalRange = editor.getSelectionRange();
+                if (editor.selection.isEmpty()) {
+                    var curpos = editor.getCursorPosition();
+                    editor.session.insert(curpos, '~~');
+                    editor.focus();
+                    editor.selection.moveTo(curpos.row, curpos.column+1);
+                }
+                else {
+                  var range = editor.getSelectionRange();
+                  var text = editor.session.getTextRange(range);
+                  editor.session.replace(range, '~'+text+'~');
+                  originalRange.end.column += 2;
+                  editor.focus();
+                  editor.selection.setSelectionRange(originalRange);
+                }
+            }
+            // win/linux: Ctrl+Alt+D, mac: Command+Option+D
+            var markdownToDisplayMath = function(editor) {
+                var originalRange = editor.getSelectionRange();
+                if (editor.selection.isEmpty()) {
+                    var curpos = editor.getCursorPosition();
+                    editor.session.insert(curpos, '$$$$');
+                    editor.focus();
+                    editor.selection.moveTo(curpos.row, curpos.column+2);
+                }
+                else {
+                  var range = editor.getSelectionRange();
+                  var text = editor.session.getTextRange(range);
+                  editor.session.replace(range, '$$'+text+'$$');
+                  originalRange.end.column += 4;
+                  editor.focus();
+                  editor.selection.setSelectionRange(originalRange);
+                }
+            }
+            // win/linux: Ctrl+Alt+L, mac: Command+Option+L
+            var markdownToLatex = function(editor) {
+                var originalRange = editor.getSelectionRange();
+                if (editor.selection.isEmpty()) {
+                    var curpos = editor.getCursorPosition();
+                    editor.session.insert(curpos, '\n\n<latex>\n\n</latex>\n');
+                    editor.focus();
+                    editor.selection.moveTo(curpos.row+3, curpos.column+7);
+                }else {
+                  var range = editor.getSelectionRange();
+                  var text = editor.session.getTextRange(range);
+                  editor.session.replace(range, '\n\n<latex>\n'+text+'\n</latex>\n');
+                  editor.selection.moveTo(
+                      originalRange.end.row+3,
+                      originalRange.end.column+6
+                  );
+                }
+            }
             // win/linux: Ctrl+Q, mac: Command+Q
             var markdownToBlockQuote = function(editor) {
                 var originalRange = editor.getSelectionRange();
@@ -626,6 +680,30 @@
                 readOnly: true
             });
             editor.commands.addCommand({
+                name: 'markdownToInlineMath',
+                bindKey: {win: 'Ctrl-Alt-I', mac: 'Command-Option-I'},
+                exec: function(editor) {
+                    markdownToInlineMath(editor);
+                },
+                readOnly: true
+            });
+            editor.commands.addCommand({
+                name: 'markdownToDisplayMath',
+                bindKey: {win: 'Ctrl-Alt-D', mac: 'Command-Option-D'},
+                exec: function(editor) {
+                    markdownToDisplayMath(editor);
+                },
+                readOnly: true
+            });
+            editor.commands.addCommand({
+                name: 'markdownToLatex',
+                bindKey: {win: 'Ctrl-Alt-L', mac: 'Command-Option-L'},
+                exec: function(editor) {
+                    markdownToLatex(editor);
+                },
+                readOnly: true
+            });
+            editor.commands.addCommand({
                 name: 'markdownToBlockQuote',
                 bindKey: {win: 'Ctrl-Q', mac: 'Command-Q'},
                 exec: function(editor) {
@@ -700,6 +778,15 @@
             });
             $('.markdown-code[data-field-name='+field_name+']').click(function(){
                 markdownToCode(editor);
+            });
+            $('.markdown-inline-math[data-field-name='+field_name+']').click(function(){
+                markdownToInlineMath(editor);
+            });
+            $('.markdown-display-math[data-field-name='+field_name+']').click(function(){
+                markdownToDisplayMath(editor);
+            });
+            $('.markdown-latex[data-field-name='+field_name+']').click(function(){
+                markdownToLatex(editor);
             });
             $('.markdown-blockquote[data-field-name='+field_name+']').click(function(){
                 markdownToBlockQuote(editor);
