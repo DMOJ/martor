@@ -230,31 +230,14 @@
                 var originalRange = editor.getSelectionRange();
                 if (editor.selection.isEmpty()) {
                     var curpos = editor.getCursorPosition();
-                    editor.session.insert(curpos, ' __ ');
+                    editor.session.insert(curpos, ' ** ');
                     editor.focus();
                     editor.selection.moveTo(curpos.row, curpos.column+2);
                 }else {
                   var range = editor.getSelectionRange();
                   var text = editor.session.getTextRange(range);
-                  editor.session.replace(range, '_'+text+'_');
-                  originalRange.end.column += 2; // this because injected from 2 `_` characters.
-                  editor.focus();
-                  editor.selection.setSelectionRange(originalRange);
-                }
-            };
-            // win/linux: Ctrl+Shift+U
-            var markdownToUnderscores = function(editor) {
-                var originalRange = editor.getSelectionRange();
-                if (editor.selection.isEmpty()) {
-                    var curpos = editor.getCursorPosition();
-                    editor.session.insert(curpos, ' ++++ ');
-                    editor.focus();
-                    editor.selection.moveTo(curpos.row, curpos.column+3);
-                }else {
-                  var range = editor.getSelectionRange();
-                  var text = editor.session.getTextRange(range);
-                  editor.session.replace(range, '++'+text+'++');
-                  originalRange.end.column += 4; // this because injected from 4 `*` characters.
+                  editor.session.replace(range, '*'+text+'*');
+                  originalRange.end.column += 2; // this because injected from 2 `*` characters.
                   editor.focus();
                   editor.selection.setSelectionRange(originalRange);
                 }
@@ -583,14 +566,6 @@
                 bindKey: {win: 'Ctrl-I', mac: 'Command-I'},
                 exec: function(editor) {
                     markdownToItalic(editor);
-                },
-                readOnly: true
-            });
-            editor.commands.addCommand({
-                name: 'markdownToUnderscores',
-                bindKey: {win: 'Ctrl-Shift-U', mac: 'Command-Option-U'},
-                exec: function(editor) {
-                    markdownToUnderscores(editor);
                 },
                 readOnly: true
             });
