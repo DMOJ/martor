@@ -384,14 +384,13 @@
                     editor.session.insert(curpos, '~~');
                     editor.focus();
                     editor.selection.moveTo(curpos.row, curpos.column+1);
-                }
-                else {
-                  var range = editor.getSelectionRange();
-                  var text = editor.session.getTextRange(range);
-                  editor.session.replace(range, '~'+text+'~');
-                  originalRange.end.column += 2;
-                  editor.focus();
-                  editor.selection.setSelectionRange(originalRange);
+                } else {
+                    var range = editor.getSelectionRange();
+                    var text = editor.session.getTextRange(range);
+                    editor.session.replace(range, '~'+text+'~');
+                    originalRange.end.column += 2;
+                    editor.focus();
+                    editor.selection.setSelectionRange(originalRange);
                 }
             }
             // win/linux: Ctrl+Alt+D, mac: Command+Option+D
@@ -402,14 +401,13 @@
                     editor.session.insert(curpos, '$$$$');
                     editor.focus();
                     editor.selection.moveTo(curpos.row, curpos.column+2);
-                }
-                else {
-                  var range = editor.getSelectionRange();
-                  var text = editor.session.getTextRange(range);
-                  editor.session.replace(range, '$$'+text+'$$');
-                  originalRange.end.column += 4;
-                  editor.focus();
-                  editor.selection.setSelectionRange(originalRange);
+                } else {
+                    var range = editor.getSelectionRange();
+                    var text = editor.session.getTextRange(range);
+                    editor.session.replace(range, '$$'+text+'$$');
+                    originalRange.end.column += 4;
+                    editor.focus();
+                    editor.selection.setSelectionRange(originalRange);
                 }
             }
             // win/linux: Ctrl+Alt+L, mac: Command+Option+L
@@ -420,14 +418,14 @@
                     editor.session.insert(curpos, '\n\n<latex>\n\n</latex>\n');
                     editor.focus();
                     editor.selection.moveTo(curpos.row+3, curpos.column+7);
-                }else {
-                  var range = editor.getSelectionRange();
-                  var text = editor.session.getTextRange(range);
-                  editor.session.replace(range, '\n\n<latex>\n'+text+'\n</latex>\n');
-                  editor.selection.moveTo(
-                      originalRange.end.row+3,
-                      originalRange.end.column+6
-                  );
+                } else {
+                    var range = editor.getSelectionRange();
+                    var text = editor.session.getTextRange(range);
+                    editor.session.replace(range, '\n\n<latex>\n'+text+'\n</latex>\n');
+                    editor.selection.moveTo(
+                        originalRange.end.row+3,
+                        originalRange.end.column+6
+                    );
                 }
             }
             // win/linux: Ctrl+Q, mac: Command+Q
