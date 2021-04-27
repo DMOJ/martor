@@ -920,7 +920,7 @@
     };
 
     $(function() {
-        $('.main-martor').martor();
+        $('.main-martor').not('[data-field-name*=-__prefix__-]').martor();
     });
 
     if ('django' in window && 'jQuery' in window.django)
