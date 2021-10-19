@@ -58,6 +58,18 @@
                 $(obj).addClass('enable-living');
             }
 
+            var handleContentPasteClick = function (event) {
+                var { items } = event.clipboardData;
+                items = Object.values(items).filter(item => item.type.match(/^image\//));
+                if (items.length != 1) {
+                    console.log(`Invalid number of items in clipboard (${items.length}), skipping!`);
+                    return;
+                }
+                markdownToUploadImage(editor, items[0].getAsFile());
+            }
+
+            obj.addEventListener('paste', handleContentPasteClick);
+
             var emojiWordCompleter = {
                 getCompletions: function(editor, session, pos, prefix, callback) {
                     var wordList = typeof(emojis) != "undefined" ? emojis : []; // from `atwho/emojis.min.js`
@@ -565,10 +577,13 @@
             };
             // Markdown Image Uploader auto insert to editor.
             // with special insert, eg: ![avatar.png](i.imgur.com/DytfpTz.png)
-            var markdownToUploadImage = function(editor) {
+            var markdownToUploadImage = function(editor, imageData) {
                 var firstForm = $('#'+editorId).closest('form').get(0);
                 var field_name = editor.container.id.replace('martor-', '');
                 var form = new FormData(firstForm);
+                if (imageData) {
+                    form.append('markdown-image-upload', imageData);
+                }
                 form.append('csrfmiddlewaretoken', getCookie('csrftoken'));
 
                 $.ajax({
