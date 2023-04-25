@@ -49,7 +49,6 @@
             editor.setShowPrintMargin(false);
             editor.setOptions({
                 enableBasicAutocompletion: true,
-                enableSnippets: true,
                 enableLiveAutocompletion: true,
                 enableMultiselect: false
             });
