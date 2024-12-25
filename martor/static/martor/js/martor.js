@@ -31,16 +31,33 @@
             return cookieValue;
         };
 
+        var isDarkMode = function () {
+            var theme = $('body').data('theme');
+            if (theme === 'auto') {
+                return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            } else if (theme === 'dark') {
+                return true;
+            } else {
+                return false;
+            }
+        };
+
         // Each multiple editor fields
         this.each(function(i, obj) {
             var mainMartor   = $(obj);
             var field_name   = mainMartor.data('field-name');
+            var darkMode     = isDarkMode();
+            var ace_theme    = darkMode ? 'twilight' : 'github';
             var textareaId   = $('#id_'+field_name);
             var editorId     = 'martor-'+field_name;
             var editor       = ace.edit(editorId);
             var editorConfig = JSON.parse(textareaId.data('enable-configs').replace(/'/g, '"'));
 
-            editor.setTheme('ace/theme/github');
+            if (darkMode) {
+                mainMartor.find('.ui').toggleClass('inverted');
+            }
+
+            editor.setTheme('ace/theme/' + ace_theme);
             editor.getSession().setMode('ace/mode/markdown');
             editor.getSession().setUseWrapMode(true);
             editor.$blockScrolling = Infinity; // prevents ace from logging annoying warnings
