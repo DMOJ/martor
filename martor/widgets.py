@@ -12,8 +12,6 @@ from .settings import (
 
 
 class MartorWidget(forms.Textarea):
-    UPLOADS_ENABLED = False
-
     def render(self, name, value, attrs=None, renderer=None, **kwargs):
         # Make the settings the default attributes to pass
         attributes_to_pass = {
@@ -38,18 +36,20 @@ class MartorWidget(forms.Textarea):
         # being part of the render chain.
         attributes_to_pass.update(self.attrs)
 
-        widget = super(MartorWidget, self).render(name, value, attributes_to_pass)
+        widget = super(MartorWidget, self).render(
+            name, value, attributes_to_pass)
 
         template = get_template('martor/editor.html')
         emoji_enabled = MARTOR_ENABLE_CONFIGS.get('emoji') == 'true'
         mentions_enabled = MARTOR_ENABLE_CONFIGS.get('mention') == 'true'
+        uploads_enabled = MARTOR_ENABLE_CONFIGS.get('uploads') == 'true'
 
         return template.render({
             'martor': widget,
             'field_name': name,
             'emoji_enabled': emoji_enabled,
             'mentions_enabled': mentions_enabled,
-            'uploads_enabled': self.UPLOADS_ENABLED,
+            'uploads_enabled': uploads_enabled,
         })
 
     class Media:
